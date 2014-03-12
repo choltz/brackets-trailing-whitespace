@@ -31,15 +31,12 @@ define(function (require, exports, module) {
     // Modules
     var PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         Menus               = brackets.getModule("command/Menus"),
-        CommandManager      = brackets.getModule("command/CommandManager"),
-        AppInit             = brackets.getModule("utils/AppInit");
+        CommandManager      = brackets.getModule("command/CommandManager");
 
     var COMMAND_ID          = 'trailingwhitespace.toggle';
     
-    var enabled = false;
     var _prefs  = PreferencesManager.getPreferenceStorage(module, { enabled: false });
-
-    var _configureMenu, _setMenuCheckedValue, _toggleSetting;
+    var initialize, _configureMenu, _setMenuCheckedValue, _toggleSetting;
     
     _configureMenu = function () {
         CommandManager.register("Show Trailing White Space", COMMAND_ID, _toggleSetting);
@@ -54,16 +51,13 @@ define(function (require, exports, module) {
     };
     
     _toggleSetting = function () {
-        enabled = !enabled;
-        _setMenuCheckedValue(enabled);
+        _setMenuCheckedValue(!_prefs.getValue("enabled"));
     };
   
-    AppInit.appReady(function () {
+    initialize = function () {
         _configureMenu();
-        enabled = _prefs.getValue("enabled");
-        _setMenuCheckedValue(enabled);
-    });
-
-    exports.enabled = enabled;
+        _setMenuCheckedValue(_prefs.getValue("enabled"));
+    };
+    
+    exports.initialize = initialize;
 });
-
