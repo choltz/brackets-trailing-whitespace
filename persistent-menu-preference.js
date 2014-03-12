@@ -19,12 +19,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 
 /*jslint vars: true, plusplus: true, devel: true, regexp: true, nomen: true, indent: 4, maxerr: 50 */
 /*global define, brackets, $ */
 
+/*
+ * Create a toggle menu item ans save the value to the preference manager.
+ * This is an attempt to isolate this concern and to keep a simple interface.
+ */
 define(function (require, exports, module) {
     "use strict";
 
@@ -37,6 +40,19 @@ define(function (require, exports, module) {
     
     var _prefs  = PreferencesManager.getPreferenceStorage(module, { enabled: false });
     var initialize, _configureMenu, _setMenuCheckedValue, _toggleSetting;
+
+    //
+    // Public functions
+    //
+    
+    initialize = function () {
+        _configureMenu();
+        _setMenuCheckedValue(_prefs.getValue("enabled"));
+    };
+
+    //
+    // Private functions
+    //
     
     _configureMenu = function () {
         CommandManager.register("Show Trailing White Space", COMMAND_ID, _toggleSetting);
@@ -53,11 +69,6 @@ define(function (require, exports, module) {
     _toggleSetting = function () {
         _setMenuCheckedValue(!_prefs.getValue("enabled"));
     };
-  
-    initialize = function () {
-        _configureMenu();
-        _setMenuCheckedValue(_prefs.getValue("enabled"));
-    };
-    
+
     exports.initialize = initialize;
 });
