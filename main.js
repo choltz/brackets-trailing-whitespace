@@ -28,11 +28,10 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var _persistentMenu = require('persistent-menu-preference');
     var AppInit         = brackets.getModule("utils/AppInit");
     
     AppInit.appReady(function () {
-        _persistentMenu.createPersistentMenuItem("Show Trailing White Space", "trailingwhitespace.toggle");
+        var whitespaceMenu = require('persistent-menu-preference');
+        whitespaceMenu.createPersistentMenuItem("Show Trailing White Space", "trailingwhitespace.toggle");
     });
-
 });
