@@ -32,7 +32,7 @@ define(function (require, exports, module) {
     var AppInit         = brackets.getModule("utils/AppInit");
     
     AppInit.appReady(function () {
-        _persistentMenu.initialize();
+        _persistentMenu.createPersistentMenuItem("Show Trailing White Space", "trailingwhitespace.toggle");
     });
 
 });

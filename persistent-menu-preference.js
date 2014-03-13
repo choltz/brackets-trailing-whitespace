@@ -33,20 +33,20 @@ define(function (require, exports, module) {
 
     // Modules
     var PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
-        Menus               = brackets.getModule("command/Menus"),
         CommandManager      = brackets.getModule("command/CommandManager");
-
-    var COMMAND_ID          = 'trailingwhitespace.toggle';
     
-    var _prefs  = PreferencesManager.getPreferenceStorage(module, { enabled: false });
-    var initialize, _configureMenu, _setMenuCheckedValue, _toggleSetting;
+    var _prefs     = PreferencesManager.getPreferenceStorage(module, { enabled: false });
+    var _commandId = null;
 
+    var createPersistentMenuItem, _configureMenu, _setMenuCheckedValue, _toggleSetting;
+    
     //
     // Public functions
     //
     
-    initialize = function () {
-        _configureMenu();
+    createPersistentMenuItem = function (menuText, commandId) {
+        _commandId = commandId;
+        _configureMenu(menuText);
         _setMenuCheckedValue(_prefs.getValue("enabled"));
     };
 
@@ -54,13 +54,15 @@ define(function (require, exports, module) {
     // Private functions
     //
     
-    _configureMenu = function () {
-        CommandManager.register("Show Trailing White Space", COMMAND_ID, _toggleSetting);
-        Menus.getMenu(Menus.AppMenuBar.VIEW_MENU).addMenuItem(COMMAND_ID);
+    _configureMenu = function (menuText) {
+        var Menus               = brackets.getModule("command/Menus");
+
+        CommandManager.register(menuText, _commandId, _toggleSetting);
+        Menus.getMenu(Menus.AppMenuBar.VIEW_MENU).addMenuItem(_commandId);
     };
     
     _setMenuCheckedValue = function (value) {
-        var command = CommandManager.get(COMMAND_ID);
+        var command = CommandManager.get(_commandId);
 
         command.setChecked(value);
         _prefs.setValue("enabled", value);
@@ -70,5 +72,5 @@ define(function (require, exports, module) {
         _setMenuCheckedValue(!_prefs.getValue("enabled"));
     };
 
-    exports.initialize = initialize;
+    exports.createPersistentMenuItem = createPersistentMenuItem;
 });
