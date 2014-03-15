@@ -33,5 +33,9 @@ define(function (require, exports, module) {
     AppInit.appReady(function () {
         var whitespaceMenu = require('persistent-menu-preference');
         whitespaceMenu.createPersistentMenuItem("Show Trailing White Space", "trailingwhitespace.toggle");
+
+    
+        var whitespaceMenu2 = require('persistent-menu-preference');
+        whitespaceMenu2.createPersistentMenuItem("Show Trailing White Space 2", "trailingwhitespace2.toggle");
     });
 });

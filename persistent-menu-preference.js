@@ -69,6 +69,7 @@ define(function (require, exports, module) {
     };
     
     _toggleSetting = function () {
+        // alert(this["_id"]);
         _setMenuCheckedValue(!_prefs.getValue("enabled"));
     };
 
