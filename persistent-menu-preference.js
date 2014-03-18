@@ -35,9 +35,9 @@ define(function (require, exports, module) {
     var PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         CommandManager      = brackets.getModule("command/CommandManager");
     
-    var _prefs     = PreferencesManager.getPreferenceStorage(module, { enabled: false });
-    var _commandId = null;
-
+    var _prefs = PreferencesManager.stateManager.getPrefixedSystem("persistent_whitespace");
+    
+    // Function declarations
     var createPersistentMenuItem, _configureMenu, _setMenuCheckedValue, _toggleSetting;
     
     //
@@ -45,32 +45,31 @@ define(function (require, exports, module) {
     //
     
     createPersistentMenuItem = function (menuText, commandId) {
-        _commandId = commandId;
-        _configureMenu(menuText);
-        _setMenuCheckedValue(_prefs.getValue("enabled"));
+        _configureMenu(menuText, commandId);
+        _setMenuCheckedValue(commandId, _prefs.get(commandId + '_enabled'));
     };
 
     //
     // Private functions
     //
     
-    _configureMenu = function (menuText) {
+    _configureMenu = function (menuText, commandId) {
         var Menus               = brackets.getModule("command/Menus");
 
-        CommandManager.register(menuText, _commandId, _toggleSetting);
-        Menus.getMenu(Menus.AppMenuBar.VIEW_MENU).addMenuItem(_commandId);
+        CommandManager.register(menuText, commandId, _toggleSetting);
+        Menus.getMenu(Menus.AppMenuBar.VIEW_MENU).addMenuItem(commandId);
     };
     
-    _setMenuCheckedValue = function (value) {
-        var command = CommandManager.get(_commandId);
+    _setMenuCheckedValue = function (commandId, value) {
+        var command = CommandManager.get(commandId);
 
         command.setChecked(value);
-        _prefs.setValue("enabled", value);
+        _prefs.set(commandId + '_enabled', value);
     };
     
     _toggleSetting = function () {
-        // alert(this["_id"]);
-        _setMenuCheckedValue(!_prefs.getValue("enabled"));
+        var commandId = this._id;
+        _setMenuCheckedValue(commandId, !_prefs.get(commandId + '_enabled'));
     };
 
     exports.createPersistentMenuItem = createPersistentMenuItem;
