@@ -35,7 +35,7 @@ define(function (require, exports, module) {
     var PreferencesManager  = brackets.getModule("preferences/PreferencesManager"),
         CommandManager      = brackets.getModule("command/CommandManager");
     
-    var _prefs = PreferencesManager.stateManager.getPrefixedSystem("persistent_whitespace");
+    var _prefs = PreferencesManager.stateManager.getPrefixedSystem(module.id);
     
     // Function declarations
     var createPersistentMenuItem, _configureMenu, _setMenuCheckedValue, _toggleSetting;
